@@ -4,7 +4,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.content.ContentManager;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -74,9 +76,14 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         content.add(outputScrollPane, BorderLayout.CENTER);
         content.add(inputPanel, BorderLayout.SOUTH);
 
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content myContent = contentFactory.createContent(content, "", false);
+        ContentManager contentManager = toolWindow.getContentManager();
+        contentManager.addContent(myContent);
+
         // Set the content for your tool window
-        toolWindow.getContentManager().addContent(
-                ContentFactory.SERVICE.getInstance().createContent(content, "", false));
+    //    toolWindow.getContentManager().addContent(
+  //              ContentFactory.SERVICE.getInstance().createContent(content, "", false));
 
         instance = this;
     }

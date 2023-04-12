@@ -11,6 +11,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -38,12 +40,28 @@ public class AIGenerateAction extends AnAction {
         String input = selectedText;
         HashMap<String, String> params = new HashMap<String, String>();
 
-        String instruction = "finish following code";
-        params.put("instruction", instruction);
-        params.put("input", input);
+        String instruction = "Finish following code. Provide only code with code comments";
+  //      params.put("instruction", instruction);
+  //      params.put("input", input);
+
+
+        JSONObject request = new JSONObject();
+        JSONArray messages = new JSONArray();
+
+        JSONObject message = new JSONObject();
+        message.put("role", "system");
+        message.put("content", instruction);
+        messages.put(message);
+
+        message = new JSONObject();
+        message.put("role", "user");
+        message.put("content", input);
+        messages.put(message);
+
+        request.put("messages", messages);
 
         int maxTokens = 50;
-        String response = client.generateText(params, maxTokens);
+        String response = client.generateText(request, maxTokens);
     //    LOG.info(response);
 
 

@@ -10,6 +10,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -45,12 +47,29 @@ public class AICustomAction extends AnAction {
         String input = selectedText;
         HashMap<String, String> params = new HashMap<String, String>();
 
+
        // String instruction = "Fix this";
-        params.put("instruction", instructionCustom);
-        params.put("input", input);
+
+        JSONObject request = new JSONObject();
+        JSONArray messages = new JSONArray();
+
+        JSONObject message = new JSONObject();
+        message.put("role", "system");
+        message.put("content", instructionCustom);
+        messages.put(message);
+
+        message = new JSONObject();
+        message.put("role", "user");
+        message.put("content", input);
+        messages.put(message);
+
+
+   //     params.put("instruction", instructionCustom);
+   //     params.put("input", input);
 
         int maxTokens = 50;
-        String response = client.generateText(params, maxTokens);
+        request.put("messages", messages);
+        String response = client.generateText(request, maxTokens);
     //    LOG.info(response);
 
 

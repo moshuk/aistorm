@@ -21,7 +21,7 @@ public class ChatGPTClient {
             }
          else{
        //         this.endpointUrl = "https://api.openai.com/v1/edits";
-                this.endpointUrl = "https://api.openai.com/v1/engines/text-davinci-edit-001/edits";
+                this.endpointUrl = "https://api.openai.com/v1/chat/completions";
             }
 
 
@@ -31,7 +31,7 @@ public class ChatGPTClient {
         this.apiKey = apiKey;
     }
 
-    public String generateText(HashMap<String, String> params, int maxTokens) {
+    public String generateText(JSONObject params, int maxTokens) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         MediaType mediaType = MediaType.parse("application/json");
 
@@ -44,7 +44,7 @@ public class ChatGPTClient {
         }
         requestBody.put("top_p", 1);
   //      requestBody.put("max_tokens", maxTokens);
-     //   requestBody.put("model", "text-davinci-003");
+        requestBody.put("model", "gpt-3.5-turbo");
     //    requestBody.put("model", "code-davinci-edit-0011");
 
 
@@ -59,14 +59,16 @@ public class ChatGPTClient {
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                LOG.debug("REQUEST: " + response.code() + "url: "+endpointUrl+" requestBody.toString() "+requestBody.toString());
+                LOG.info("REQUEST: " + response.code() + "url: "+endpointUrl+" requestBody.toString() "+requestBody.toString());
 
                 String responseBody = response.body().string();
                 JSONObject json = new JSONObject(responseBody);
                 JSONArray choices = json.getJSONArray("choices");
                 JSONObject firstChoice = choices.getJSONObject(0);
-                LOG.debug("RESPONSE: " + responseBody );
-                return firstChoice.getString("text");
+                LOG.info("RESPONSE: " + responseBody );
+                JSONObject message = firstChoice.getJSONObject("message");
+                return message.getString("content");
+             //   return firstChoice.toString();
              //   return responseBody;
             } else {
                 LOG.error("Failed to generate text: " + response.code() + " " + response.message() + "url: "+endpointUrl+" requestBody.toString() "+requestBody.toString());

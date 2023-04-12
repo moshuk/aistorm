@@ -41,7 +41,7 @@ public class AIFixitAction extends AnAction {
         params.put("input", input);
 
         int maxTokens = 50;
-        String response = client.generateText(params, maxTokens);
+        String response = client.generateText(null, maxTokens);
     //    LOG.info(response);
 
 

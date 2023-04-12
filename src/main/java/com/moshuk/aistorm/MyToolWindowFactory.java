@@ -8,6 +8,8 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -23,6 +25,8 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     private JTextPane outputTextPane;
     private JBScrollPane outputScrollPane;
 
+    private JSONArray messages;
+
   //  private MyToolWindowFactory() {}
 
     public static MyToolWindowFactory getInstance() {
@@ -36,7 +40,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         // Create your tool window content here
         JPanel content = new JPanel(new BorderLayout());
-
+        this.messages = new JSONArray();
         // Create a text area for user input
         inputTextArea = new JTextArea();
         inputTextArea.setEditable(true);
@@ -92,7 +96,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         // Process the user input here
         // You can do anything you want with the input
         // For example, you can print it to the console
-            String endpointUrl = "https://api.openai.com/v1/engines/text-davinci-003/completions";
+            String endpointUrl = "https://api.openai.com/v1/chat/completions";
         // https://platform.openai.com/account/api-keys
         String apiKey = "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";
 
@@ -100,13 +104,34 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
         int maxTokens = 50;
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        //     HashMap<String, String> params = new HashMap<String, String>();
 
  //       String instruction = "Finish this";
-        params.put("prompt", input);
+    //    params.put("prompt", input);
       //  params.put("input", input);
 
-        String response = client.generateText(params, maxTokens);
+        /*
+        messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Who won the world series in 2020?"},
+        {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+        {"role": "user", "content": "Where was it played?"}
+    ]
+         */
+        JSONObject  message = new JSONObject();
+
+        JSONObject request = new JSONObject();
+
+        message.put("role", "user");
+        message.put("content", input);
+
+        //        this.messages.put(message);  //TODO
+
+      //  request.put("top_p", 1);
+        request.put("messages", this.messages);
+     //   params.put("messages", messages);
+
+        String response = client.generateText(request, maxTokens);
 
         appendToOutput("AI RESPONSE: " + response, Color.BLACK);
     }

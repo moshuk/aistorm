@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.HashMap;
 
-public class AIFixitAction extends AnAction {
+public class AIOptimizeAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
         Project project = event.getProject();
@@ -38,7 +38,10 @@ public class AIFixitAction extends AnAction {
         String input = selectedText;
         HashMap<String, String> params = new HashMap<String, String>();
 
-        String instruction = "Fix this code";
+        String instruction = "Optimize following code. Provide only code with code comments";
+  //      params.put("instruction", instruction);
+  //      params.put("input", input);
+
 
         JSONObject request = new JSONObject();
         JSONArray messages = new JSONArray();
@@ -54,10 +57,6 @@ public class AIFixitAction extends AnAction {
         messages.put(message);
 
         request.put("messages", messages);
-
-
-
-
 
         int maxTokens = 50;
         String response = client.generateText(request, maxTokens);

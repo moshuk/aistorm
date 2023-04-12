@@ -38,6 +38,7 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last" />
             <action id="com.moshuk.aistorm.AIGenerateAction" class="com.moshuk.aistorm.AIGenerateAction" text="Generate"/>
             <action id="com.moshuk.aistorm.AIFixitAction" class="com.moshuk.aistorm.AIFixitAction" text="Fix it"/>
+            <action id="com.moshuk.aistorm.AIOptimizeAction" class="com.moshuk.aistorm.AIOptimizeAction" text="Custom"/>
             <action id="com.moshuk.aistorm.AICustomAction" class="com.moshuk.aistorm.AICustomAction" text="Custom"/>
         </group>
     </actions>

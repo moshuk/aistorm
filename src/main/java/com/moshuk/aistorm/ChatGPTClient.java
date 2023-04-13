@@ -2,11 +2,15 @@ package com.moshuk.aistorm;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class ChatGPTClient {
 
@@ -15,7 +19,9 @@ public class ChatGPTClient {
     private String endpointUrl;
     private String apiKey;
 
-    public ChatGPTClient(String endpointUrl) {
+    public Project project;
+
+    public ChatGPTClient(String endpointUrl, Project project) {
         if (endpointUrl != null) {
                 this.endpointUrl = endpointUrl;
             }
@@ -28,11 +34,12 @@ public class ChatGPTClient {
         AppSettingsState settings = ServiceManager.getService(AppSettingsState.class);
         String apiKey = settings.apiKey;
 
+
         this.apiKey = apiKey;
     }
 
     public String generateText(JSONObject params, int maxTokens) {
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient client = new OkHttpClient().newBuilder().callTimeout(60, TimeUnit.SECONDS).build();
         MediaType mediaType = MediaType.parse("application/json");
 
         JSONObject requestBody = new JSONObject();
@@ -72,8 +79,15 @@ public class ChatGPTClient {
              //   return responseBody;
             } else {
                 LOG.error("Failed to generate text: " + response.code() + " " + response.message() + "url: "+endpointUrl+" requestBody.toString() "+requestBody.toString());
+if(response.code() == 401)
+{
+    Messages.showErrorDialog("Please check you Open AI api key.", "Error");
+    ShowSettingsUtil.getInstance().showSettingsDialog(this.project, AppSettingsConfigurable.class);
+}
+
             }
         } catch (IOException e) {
+            Messages.showErrorDialog("An error has occurred.", "Error");
             LOG.error("Failed to generate text exceotion: " + e.getMessage());
         }
 

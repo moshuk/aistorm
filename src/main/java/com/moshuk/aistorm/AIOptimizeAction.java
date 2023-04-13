@@ -34,7 +34,7 @@ public class AIOptimizeAction extends AnAction {
         // https://platform.openai.com/account/api-keys
   //      String apiKey = "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";
 
-        ChatGPTClient client = new ChatGPTClient(null);
+        ChatGPTClient client = new ChatGPTClient(null,project);
         String input = selectedText;
         HashMap<String, String> params = new HashMap<String, String>();
 

@@ -8,14 +8,19 @@
     <name>Aistorm</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="eugene.moshuk@gmail.com" url="https://aistorm.moshuk.com">Yevhen Moshuk</vendor>
+    <vendor email="eugene.moshuk@gmail.com" url="https://github.com/moshuk/aistorm">Yevhen Moshuk</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    This plugin intagrates chatGPT to intallij idea and PHPstorm<br>
-    <em>You can use it by select code in editor and chose Aistorm in context menu</em>
+    AIStorm plugin is the ultimate productivity tool for developers!
+ <br>
+    AIStorm seamlessly integrates the powerful language model of ChatGPT into IntelliJ IDEA and PhpStorm,
+    <br>
+    allowing you to get quick and accurate answers to all your coding questions without ever having to leave your IDE.
+    <br>
+    Whether you need help with syntax, code completion, or debugging, AIStorm has got you covered.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -38,7 +43,7 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last" />
             <action id="com.moshuk.aistorm.AIGenerateAction" class="com.moshuk.aistorm.AIGenerateAction" text="Generate"/>
             <action id="com.moshuk.aistorm.AIFixitAction" class="com.moshuk.aistorm.AIFixitAction" text="Fix it"/>
-            <action id="com.moshuk.aistorm.AIOptimizeAction" class="com.moshuk.aistorm.AIOptimizeAction" text="Custom"/>
+            <action id="com.moshuk.aistorm.AIOptimizeAction" class="com.moshuk.aistorm.AIOptimizeAction" text="Optimize it"/>
             <action id="com.moshuk.aistorm.AICustomAction" class="com.moshuk.aistorm.AICustomAction" text="Custom"/>
         </group>
     </actions>

@@ -27,6 +27,11 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
     private JSONArray messages;
 
+    private ChatGPTClient chatClient;
+
+    public ToolWindow AItoolWindow;
+
+
   //  private MyToolWindowFactory() {}
 
     public static MyToolWindowFactory getInstance() {
@@ -37,7 +42,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     }
 
     @Override
-    public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+    public void createToolWindowContent(@NotNull Project project, ToolWindow toolWindow) {
         // Create your tool window content here
         JPanel content = new JPanel(new BorderLayout());
         this.messages = new JSONArray();
@@ -51,6 +56,8 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
         // Wrap the output text pane in a JBScrollPane
         outputScrollPane = new JBScrollPane(outputTextPane);
+
+        this.chatClient = new ChatGPTClient(null,project);
 
         // Add a listener for user input
         inputTextArea.addKeyListener(new KeyAdapter() {
@@ -88,19 +95,25 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         // Set the content for your tool window
     //    toolWindow.getContentManager().addContent(
   //              ContentFactory.SERVICE.getInstance().createContent(content, "", false));
-
+        AItoolWindow = toolWindow;
         instance = this;
+    }
+
+    public void showToolWindow() {
+        if (AItoolWindow != null) {
+            AItoolWindow.show(null);
+        }
     }
 
     public void processInput(String input) {
         // Process the user input here
         // You can do anything you want with the input
         // For example, you can print it to the console
-            String endpointUrl = "https://api.openai.com/v1/chat/completions";
+   //         String endpointUrl = "https://api.openai.com/v1/chat/completions";
         // https://platform.openai.com/account/api-keys
-        String apiKey = "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";
 
-        ChatGPTClient client = new ChatGPTClient(endpointUrl);
+
+        //ChatGPTClient client = new ChatGPTClient(endpointUrl);
 
         int maxTokens = 50;
 
@@ -125,13 +138,13 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         message.put("role", "user");
         message.put("content", input);
 
-        //        this.messages.put(message);  //TODO
+        this.messages.put(message);  //TODO
 
       //  request.put("top_p", 1);
         request.put("messages", this.messages);
      //   params.put("messages", messages);
 
-        String response = client.generateText(request, maxTokens);
+        String response = this.chatClient.generateText(request, maxTokens);
 
         appendToOutput("AI RESPONSE: " + response, Color.BLACK);
     }

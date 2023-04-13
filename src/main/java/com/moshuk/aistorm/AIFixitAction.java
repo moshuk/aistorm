@@ -7,7 +7,11 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,7 +38,7 @@ public class AIFixitAction extends AnAction {
         // https://platform.openai.com/account/api-keys
   //      String apiKey = "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";
 
-        ChatGPTClient client = new ChatGPTClient(null);
+        ChatGPTClient client = new ChatGPTClient(null,project);
         String input = selectedText;
         HashMap<String, String> params = new HashMap<String, String>();
 
@@ -63,10 +67,26 @@ public class AIFixitAction extends AnAction {
         String response = client.generateText(request, maxTokens);
     //    LOG.info(response);
 
-
+/*
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        ToolWindow myToolWindow = toolWindowManager.getToolWindow("MyToolWindowFactory");
+        if (myToolWindow != null) {
+            myToolWindow.show();
+        }
+*/
         MyToolWindowFactory myToolWindowFactory = MyToolWindowFactory.getInstance();
 
+      //  myToolWindowFactory.showToolWindow();
+     //   myToolWindowFactory.AItoolWindow.activate(null);
+        if(myToolWindowFactory.AItoolWindow == null)
+        {
+            ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
+            ToolWindow myToolWindow = toolWindowManager.getToolWindow("AiStorm");
+            myToolWindowFactory.createToolWindowContent(project, myToolWindow);
+
+        }
+        myToolWindowFactory.showToolWindow();
      //   ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
  //       ToolWindow toolWindow = toolWindowManager.getToolWindow("AiStorm");
  //       MyToolWindowFactory myToolWindowFactory = new MyToolWindowFactory();

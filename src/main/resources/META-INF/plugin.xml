@@ -14,13 +14,32 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    AIStorm plugin is the ultimate productivity tool for developers!
+			    AIStorm plugin is the ultimate productivity tool for developers!
  <br>
     AIStorm seamlessly integrates the powerful language model of ChatGPT into IntelliJ IDEA and PhpStorm,
     <br>
     allowing you to get quick and accurate answers to all your coding questions without ever having to leave your IDE.
     <br>
     Whether you need help with syntax, code completion, or debugging, AIStorm has got you covered.
+<br>
+    <em>You can use it by select code in editor and chose <strong>Aistorm</strong> in context menu</em>
+
+	 <ul>
+        <li>
+            <strong>Generate</strong> - Code Completion Assistance: Enhance your coding experience with AI-powered suggestions, as ChatGPT predicts and offers contextually relevant completions to help you write code more efficiently.
+        </li>
+        <li>
+            <strong>Fix it</strong> - ChatGPT will find issues in your code.
+        </li>
+        <li>
+            <strong>Optimize it</strong> - ChatGPT will find ways to improve your code.
+        </li>
+        <li>
+            <strong>Or anything else</strong> - Just ask ChatGPT what you want.
+        </li>
+    </ul>
+
+	Also you can chat with chatGPT in Aistorm Tool Window.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -41,10 +60,10 @@
     <actions>
         <group id="HelloWorldGroup" text="AI Storm" popup="true">
             <add-to-group group-id="EditorPopupMenu" anchor="last" />
-            <action id="com.moshuk.aistorm.AIGenerateAction" class="com.moshuk.aistorm.AIGenerateAction" text="Generate"/>
-            <action id="com.moshuk.aistorm.AIFixitAction" class="com.moshuk.aistorm.AIFixitAction" text="Fix it"/>
-            <action id="com.moshuk.aistorm.AIOptimizeAction" class="com.moshuk.aistorm.AIOptimizeAction" text="Optimize it"/>
-            <action id="com.moshuk.aistorm.AICustomAction" class="com.moshuk.aistorm.AICustomAction" text="Custom"/>
+            <action id="com.moshuk.aistorm.AIGenerateAction" class="com.moshuk.aistorm.AiAction" text="Generate"/>
+            <action id="com.moshuk.aistorm.AIFixitAction" class="com.moshuk.aistorm.AiAction" text="Fix it"/>
+            <action id="com.moshuk.aistorm.AIOptimizeAction" class="com.moshuk.aistorm.AiAction" text="Optimize it"/>
+            <action id="com.moshuk.aistorm.AICustomAction" class="com.moshuk.aistorm.AiAction" text="Custom"/>
         </group>
     </actions>
 

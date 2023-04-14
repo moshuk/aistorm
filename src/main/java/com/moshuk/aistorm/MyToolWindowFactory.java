@@ -87,11 +87,19 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         content.add(outputScrollPane, BorderLayout.CENTER);
         content.add(inputPanel, BorderLayout.SOUTH);
 
+
+     //   String text = "Hello, world!";
+      //  JComponent panel = new JPanel(new BorderLayout());
+     //   panel.add(new JLabel(text), BorderLayout.CENTER);
+        Content myContent = toolWindow.getContentManager().getFactory().createContent(content, "", false);
+        toolWindow.getContentManager().addContent(myContent);
+
+/*
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content myContent = contentFactory.createContent(content, "", false);
         ContentManager contentManager = toolWindow.getContentManager();
         contentManager.addContent(myContent);
-
+*/
         // Set the content for your tool window
     //    toolWindow.getContentManager().addContent(
   //              ContentFactory.SERVICE.getInstance().createContent(content, "", false));

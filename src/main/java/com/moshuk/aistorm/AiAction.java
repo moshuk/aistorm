@@ -26,17 +26,18 @@ public class AiAction extends AnAction {
 
         switch(actionId) {
             case "com.moshuk.aistorm.AIGenerateAction":
-                instruction = "Finish following code. Provide only code with code comments";
+                instruction = "Finish following code. Provide only code with code inline comments";
                 break;
             case "com.moshuk.aistorm.AIFixitAction":
-                instruction = "Fix this code";
+                instruction = "Fix this code. Provide only code with code inline comments";
                 break;
             case "com.moshuk.aistorm.AIOptimizeAction":
                 instruction =  "Optimize following code. Provide only code with code comments";
                 break;
             case "com.moshuk.aistorm.AICustomAction":
-                instruction = Messages.showInputDialog("What do you wana do:", "What do you wana do?", null);
-                if (instruction != null) {
+                String customInstruction = Messages.showInputDialog("What do you wana do:", "What do you wana do?", null);
+                if (customInstruction != null) {
+                    instruction = customInstruction;
                     //System.out.println("Введенный текстовый параметр: " + instructionCustom);
                 } else {
                     instruction ="";

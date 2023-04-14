@@ -1,5 +1,6 @@
 package com.moshuk.aistorm;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -31,7 +32,7 @@ public class ChatGPTClient {
             }
 
 
-        AppSettingsState settings = ServiceManager.getService(AppSettingsState.class);
+        AppSettingsState settings = ApplicationManager.getApplication().getService(AppSettingsState.class);
         String apiKey = settings.apiKey;
 
 

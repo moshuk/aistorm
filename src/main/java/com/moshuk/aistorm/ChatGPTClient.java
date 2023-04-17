@@ -40,7 +40,7 @@ public class ChatGPTClient {
     }
 
     public String generateText(JSONObject params, int maxTokens) {
-        OkHttpClient client = new OkHttpClient().newBuilder().callTimeout(60, TimeUnit.SECONDS).build();
+        OkHttpClient client = new OkHttpClient().newBuilder().callTimeout(60, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).build();
         MediaType mediaType = MediaType.parse("application/json");
 
         JSONObject requestBody = new JSONObject();
@@ -79,17 +79,21 @@ public class ChatGPTClient {
              //   return firstChoice.toString();
              //   return responseBody;
             } else {
-                LOG.error("Failed to generate text: " + response.code() + " " + response.message() + "url: "+endpointUrl+" requestBody.toString() "+requestBody.toString());
-if(response.code() == 401)
+             if(response.code() == 401)
 {
     Messages.showErrorDialog("Please check you Open AI api key.", "Error");
     ShowSettingsUtil.getInstance().showSettingsDialog(this.project, AppSettingsConfigurable.class);
-}
+} else {
+    Messages.showErrorDialog("Something wrong.", "Error");
+                    LOG.error("Failed to generate text: " + response.code() + " " + response.message() + "url: "+endpointUrl+" requestBody.toString() "+requestBody.toString());
+
+             }
 
             }
         } catch (IOException e) {
-            Messages.showErrorDialog("An error has occurred.", "Error");
-            LOG.error("Failed to generate text exceotion: " + e.getMessage());
+            Messages.showErrorDialog("An error has occurred." + e.getMessage(), "Error");
+          //  LOG.error("Failed to generate text exceotion: " + e.getMessage());
+            return null;
         }
 
         return null;

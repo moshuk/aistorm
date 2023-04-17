@@ -1,8 +1,11 @@
 package com.moshuk.aistorm;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowFactory;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
@@ -18,7 +21,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
-public class MyToolWindowFactory implements ToolWindowFactory {
+public class MyToolWindowFactory implements ToolWindowFactory, ProjectManagerListener {
 
     private static MyToolWindowFactory instance;
     private JTextArea inputTextArea;
@@ -106,7 +109,24 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         AItoolWindow = toolWindow;
         instance = this;
     }
+/*
+    @Override
+    public void projectOpened(Project project) {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
+        if (AItoolWindow == null) {
+
+            AItoolWindow = toolWindowManager.registerToolWindow("AiStorm", true, ToolWindowAnchor.BOTTOM);
+
+         //   ToolWindow myToolWindow = toolWindowManager.getToolWindow("AiStorm");
+            this.createToolWindowContent(project, AItoolWindow);
+
+
+            }
+        this.showToolWindow();
+
+    }
+*/
     public void showToolWindow() {
         if (AItoolWindow != null) {
             AItoolWindow.show(null);
@@ -162,9 +182,13 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         StyleContext styleContext = StyleContext.getDefaultStyleContext();
         AttributeSet attributeSet = styleContext.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
 
+        if(this.outputTextPane == null)
+        {
+            return;
+        }
         int length = outputTextPane.getDocument().getLength();
-        outputTextPane.setCaretPosition(length);
-        outputTextPane.setCharacterAttributes(attributeSet, false);
+        this.outputTextPane.setCaretPosition(length);
+        this.outputTextPane.setCharacterAttributes(attributeSet, false);
   //      outputTextPane.replaceSelection(text + "\n");
 
         StyledDocument doc = outputTextPane.getStyledDocument();

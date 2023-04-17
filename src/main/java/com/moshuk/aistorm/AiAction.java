@@ -9,6 +9,8 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +26,16 @@ public class AiAction extends AnAction {
 
         String instruction  = "";
 
+        Project project = event.getProject();
+        Editor editor = event.getData(PlatformDataKeys.EDITOR);
+        Document document = editor.getDocument();
+        // Work off of the primary caret to get the selection info
+        Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
+        int start = primaryCaret.getSelectionStart();
+        int end = primaryCaret.getSelectionEnd();
+
+        String selectedText = editor.getSelectionModel().getSelectedText();
+
         switch(actionId) {
             case "com.moshuk.aistorm.AIGenerateAction":
                 instruction = "Finish following code. Provide only code with code inline comments";
@@ -37,7 +49,13 @@ public class AiAction extends AnAction {
             case "com.moshuk.aistorm.AICustomAction":
                 String customInstruction = Messages.showInputDialog("What do you wana do:", "What do you wana do?", null);
                 if (customInstruction != null) {
-                    instruction = customInstruction;
+
+                    if(selectedText == "" || selectedText == null)
+                    {
+                        selectedText = customInstruction;
+                    } else {
+                        instruction = customInstruction;
+                    }
                     //System.out.println("Введенный текстовый параметр: " + instructionCustom);
                 } else {
                     instruction ="";
@@ -47,15 +65,11 @@ public class AiAction extends AnAction {
                 instruction ="";
         }
 
-        Project project = event.getProject();
-        Editor editor = event.getData(PlatformDataKeys.EDITOR);
-        Document document = editor.getDocument();
-        // Work off of the primary caret to get the selection info
-        Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
-        int start = primaryCaret.getSelectionStart();
-        int end = primaryCaret.getSelectionEnd();
+        if(selectedText == "" || selectedText == null) {
+            Messages.showErrorDialog("Please select code.", "Error");
+            return;
+        }
 
-        String selectedText = editor.getSelectionModel().getSelectedText();
         //send to ChatGPT
 
         ChatGPTClient client = new ChatGPTClient(null,project);
@@ -65,11 +79,13 @@ public class AiAction extends AnAction {
 
         JSONObject request = new JSONObject();
         JSONArray messages = new JSONArray();
-
         JSONObject message = new JSONObject();
-        message.put("role", "system");
-        message.put("content", instruction);
-        messages.put(message);
+        if (instruction != "") {
+            message.put("role", "system");
+            message.put("content", instruction);
+            messages.put(message);
+        }
+
 
         message = new JSONObject();
         message.put("role", "user");
@@ -87,6 +103,16 @@ public class AiAction extends AnAction {
 
 
         MyToolWindowFactory myToolWindowFactory = MyToolWindowFactory.getInstance();
+
+        if(myToolWindowFactory.AItoolWindow == null)
+        {
+            ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+
+            ToolWindow myToolWindow = toolWindowManager.getToolWindow("AiStorm");
+            myToolWindowFactory.createToolWindowContent(project, myToolWindow);
+
+        }
+        myToolWindowFactory.showToolWindow();
 
         myToolWindowFactory.appendToOutput(">>> " + instruction, Color.BLUE);
         myToolWindowFactory.appendToOutput(">>> " + input, Color.BLUE);

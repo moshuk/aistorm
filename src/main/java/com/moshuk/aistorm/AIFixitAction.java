@@ -84,9 +84,10 @@ public class AIFixitAction extends AnAction {
 
             ToolWindow myToolWindow = toolWindowManager.getToolWindow("AiStorm");
             myToolWindowFactory.createToolWindowContent(project, myToolWindow);
+            myToolWindowFactory.showToolWindow();
 
         }
-        myToolWindowFactory.showToolWindow();
+
      //   ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
  //       ToolWindow toolWindow = toolWindowManager.getToolWindow("AiStorm");
  //       MyToolWindowFactory myToolWindowFactory = new MyToolWindowFactory();
